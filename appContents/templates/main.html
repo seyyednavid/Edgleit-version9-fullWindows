@@ -1,0 +1,48 @@
+{% extends 'base.html' %} {% block title %} Main Page {% endblock %} {% block
+content %}
+</style>
+<div class="main-page">
+  <p class="main-paragraph">Welcome to the <span class="title-color">Main Page</span></p>
+  <!-- <a class="main-link" href="{{url_for('edgelit_save')}}">Go to the Settings Page</button> -->
+  <div class="main-btns">
+    <div class="btn-container" id="settingsButton">
+      <button class="btn-color-1">
+        <span> Navigate to the Settings Page</span>
+        <svg viewBox="0 0 13 10" height="10px" width="15px">
+          <path d="M1,5 L11,5"></path>
+          <polyline points="8 1 12 5 8 9"></polyline>
+        </svg>
+      </button>
+    </div>
+    <div class="btn-container" id="addVideos">
+      <button class="btn-color-1" >
+        <span> Proceed to upload new videos</span>
+        <svg viewBox="0 0 13 10" height="10px" width="15px">
+          <path d="M1,5 L11,5"></path>
+          <polyline points="8 1 12 5 8 9"></polyline>
+        </svg>
+      </button>
+    </div>
+    <div class="btn-container" id="removeVideos">
+      <button class="btn-color-1" >
+        <span>Access video deletion feature</span>
+        <svg viewBox="0 0 13 10" height="10px" width="15px">
+          <path d="M1,5 L11,5"></path>
+          <polyline points="8 1 12 5 8 9"></polyline>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+<script>
+  document.getElementById("settingsButton").onclick = function () {
+    window.location.href = "{{url_for('edgelit_save')}}";
+  };
+  document.getElementById("addVideos").onclick = function () {
+    window.location.href = "{{url_for('upload')}}";
+  };
+  document.getElementById("removeVideos").onclick = function () {
+    window.location.href = "{{url_for('show_remove_page')}}";
+  };
+</script>
+{% endblock %}

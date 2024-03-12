@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <head>
+      <meta charset="utf-8" />
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, shrink-to-fit=no"
+      />
+      <link
+        rel="icon"
+        href="{{ url_for('static', filename='img/favicon.png') }}"
+        type="image/x-icon"
+      />
+      <link
+        rel="stylesheet"
+        type="text/css"
+        href="{{ url_for('static', filename='css/bootstrap.min.css') }}"
+      />
+      <link
+        rel="stylesheet"
+        type="text/css"
+        href="{{ url_for('static', filename='css/styles.css') }}"
+      />
+      <title>{% block title %}{% endblock %}</title>
+    </head>
+  </head>
+  <body>
+    <header class="header">
+      <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-custom">
+        <div class="container-fluid">
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarScroll"
+            aria-controls="navbarScroll"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <a class="navbar-brand" href="{{ url_for('main') }}">
+            <img
+              src="{{ url_for('static', filename='img/Tensator_Logo_White.png') }}"
+              alt="logo in navbar"
+            />
+          </a>
+          <div class="collapse navbar-collapse" id="navbarScroll">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item" style="margin-left: 1rem">
+                <a
+                  class="nav-link"
+                  aria-current="page"
+                  href="{{ url_for('main') }}"
+                  >Home</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('edgelit_save') }}">
+                  Setting</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('upload') }}">Upload </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('show_remove_page') }}"
+                  >Remove
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('logout') }}">Log Out </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div class="body">
+      <section class="content" style="height: 70%">
+        {% block content %} {% endblock %}
+      </section>
+    </div>
+
+    <footer>
+      <div class="footer">
+        <p>&copy; 2024 Tensator</p>
+      </div>
+    </footer>
+
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', filename='js/bootstrap.min.js') }}"
+    ></script>
+  </body>
+</html>

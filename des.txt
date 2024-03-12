@@ -1,0 +1,25 @@
+Wednesday:
+1 - handle the videos , they play in order completely
+2 - work on styling
+    2-1 : height for all pages
+    2-2 : change input size in setting page in mobile size
+    2-3: apply specific size for header and footer
+3 - upload page => add position for each videos
+4 - navbar => move home to the right side
+5 - upload => define some to condition to get unusual name and tern it to usual name and save it.
+
+
+Thursday : 7/3
+I am  working on docker 
+I am working on adjusting router and network with real static input
+
+
+Friday: 8/3 
+I have adjusted modem and create a good network connection 
+I am studing about how can I use docker for flask application on python 
+
+
+Monday:
+1 - work on upload page - the size of input in mobile size
+2 - Create an overlay for my navbar
+3 - Decrese latency for resuming background videos

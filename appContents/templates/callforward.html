@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+    <title>Video Player</title>
+  </head>
+  <body>
+    <style>
+      body {
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+        background-image: none !important;
+        background-color: rgb(38, 141, 236) !important;
+      }
+    </style>
+    <video id="videoPlayer" autoplay preload="auto">
+      <source
+        src="{{ url_for('static',  filename= 'videos/' + video_files['background'])}}"
+        type="video/mp4"
+      />
+      Your browser does not support the video tag.
+    </video>
+
+    <script>
+      var websocket;
+      var video_files = {{ video_files | tojson | safe }};
+      // Appends '#t={{ backgroundVideoTime }}' to start video playback from a specific time.
+      var backgroundVideo = "{{ url_for('static',  filename= 'videos/' + video_files['background'])}}#t={{ backgroundVideoTime }}";
+      var currentVideo = backgroundVideo;
+      var backgroundVideoTime = 0; // Variable to track the current time of the background video
+      var videoQueue = []; // Queue to store target numbers and corresponding videos
+      var positionIsPlaying = false; // Flag to indicate if a video is currently playing
+
+
+
+      // Function to play the background video
+      function playBackground() {
+        positionIsPlaying = false
+        videoPlayer.src = backgroundVideo;
+        videoPlayer.play();
+      }
+
+
+      // Function to play the next video in the queue
+      function playNextVideo() {
+        positionIsPlaying = true
+        if (videoQueue.length > 0) {
+            positionIsPlaying = true
+            var nextVideo = videoQueue.shift(); // Get the next video from the queue
+            var target = nextVideo.target;
+            var filename = nextVideo.filename;
+
+          // Pause the background  video before loading the next one
+            if (videoPlayer.src.endsWith(video_files["background"])) {
+              videoPlayer.pause();
+              backgroundVideoTime = videoPlayer.currentTime;
+            }
+            // Set the source of the video player to the relative video
+            videoPlayer.src = "{{ url_for('static', filename='videos/') }}" + filename;
+            videoPlayer.load();
+            // Ensure the video player resumes playing after the video is loaded
+            videoPlayer.play();
+        } else {
+            positionIsPlaying = false
+            playBackground();
+        }
+      }
+
+
+      // Event listener to handle the end of the video
+      videoPlayer.addEventListener('ended', function() {
+        positionIsPlaying = false
+        if (videoQueue.length > 0) {
+            playNextVideo(); // Play the next video in the queue after the current video finishes
+        } else  {
+            playBackground(); // If the queue is empty and background video is not already playing, resume the background video
+        }
+      });
+
+
+      // Function to handle the WebSocket message
+      function handleWebSocketMessage(message) {
+        if (message.ws_id == "Tensator_Websocket_server" && message.cb_id == "CB_123456789" && message.device_type == "Edgelit-button") {
+            var cf_event = message.cmd_info.event;
+            if (cf_event == "Close") {
+                //No action here yet
+            } else if (cf_event == "Open") {
+                var called_position = message.cmd_info.target;
+                var filename = video_files[called_position];
+                if (filename) {
+                    var videoObj = { target: called_position, filename: filename };
+                    videoQueue.push(videoObj);
+                    if (!positionIsPlaying) {
+                        playNextVideo(); // Start playing immediately if no video is currently playing
+                    }
+                }
+            } else if (cf_event == "Busy") {
+                //No action here yet
+            }
+        }
+      }
+
+
+      // Function to initialize WebSocket connection
+      function initWebSocket() {
+        // Establish WebSocket connection
+        websocket = new WebSocket("ws://" + "{{ flask_ip_address }}" + ":" + "{{ websocket_port }}");
+        websocket.onmessage = function (event) {
+            var message = JSON.parse(event.data);
+            handleWebSocketMessage(message);
+        };
+        websocket.onclose = function (event) {
+            // Handle WebSocket closed
+            console.log("WebSocket closed");
+        };
+        websocket.onerror = function (event) {
+            // Handle WebSocket error
+            console.error("WebSocket error:", event);
+        };
+      }
+
+
+      // Initialize WebSocket connection
+      initWebSocket();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,46 @@
+{% extends 'base.html' %} {% block title %} Video Files {% endblock %} {% block
+content %}
+<div class="container-removeVideo">
+  <h1>List of <span class="title-color">Video Files</span></h1>
+  <div id="flash-messages">
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %} {% for category, message in messages %}
+    <div class="flash-message {{ category }}" id="error-message">
+      {{ message }}
+    </div>
+
+    {% endfor %} {% endif %} {% endwith %}
+  </div>
+  <ol>
+    {% for video_file in video_files %}
+    <li>
+      <span class="position">
+        {% if video_file.startswith('background') %}
+          Background
+        {% else %}
+          Position {{video_file.split('.')[0]}}
+        {% endif %}
+      </span>
+      {{ video_file|safe }}
+      <button onclick="confirmRemoval('{{ video_file|safe }}')">Remove</button>
+    </li>
+    {% endfor %}
+  </ol>
+</div>
+<script>
+  function confirmRemoval(filename) {
+    if (confirm("Are you sure you want to remove " + filename + "?")) {
+      window.location.href = "/remove_video/" + filename;
+    }
+  }
+
+  var errorMessage = document.getElementById("error-message");
+  // If the error message element exists
+  if (errorMessage) {
+    // Set a timer to remove the error message after 5 seconds
+    setTimeout(function () {
+      errorMessage.remove();
+    }, 5000);
+  }
+</script>
+{% endblock %}
